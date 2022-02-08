@@ -155,10 +155,17 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">销售数量</label>
+                <label class="layui-form-label">出库桶数</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="id">
-                    <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入销售数量">
+                    <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入出库桶数">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">回桶数</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="id">
+                    <input type="text" name="numberbak" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入回桶数">
                 </div>
             </div>
             <div class="layui-inline">
@@ -274,7 +281,8 @@
                 {field: 'paytype', title: '支付类型', align: 'center',width:'90'},
                 {field: 'salestime', title: '销售时间', align: 'center',width:'170'},
                 {field: 'operateperson', title: '操作员', align: 'center',width:'130'},
-                {field: 'number', title: '销售数量', align: 'center',width:'100'},
+                {field: 'number', title: '出库桶数', align: 'center',width:'100'},
+                {field: 'numberbak', title: '回桶数', align: 'center',width:'100'},
                 {field: 'size', title: '商品规格', align: 'center',width:'100'},
                 {field: 'saleprice', title: '销售价格', align: 'center',width:'120'},
                 {field: 'remark', title: '备注', align: 'center',width:'120'},
