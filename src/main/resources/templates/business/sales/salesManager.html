@@ -124,9 +124,9 @@
         <button type="button" lay-event="delete" shiro:hasPermission="sales:delete" class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
                 class="layui-icon layui-icon-delete"></i>删除
         </button>
-        <button type="button" lay-event="back" shiro:hasPermission="sales:back" class="layui-btn layui-btn-sm layui-btn-warm layui-btn-radius"><i
-                class="layui-icon layui-icon-delete"></i>退货
-        </button>
+<!--        <button type="button" lay-event="back" shiro:hasPermission="sales:back" class="layui-btn layui-btn-sm layui-btn-warm layui-btn-radius"><i-->
+<!--                class="layui-icon layui-icon-delete"></i>退货-->
+<!--        </button>-->
     </div>
 </div>
 
@@ -174,14 +174,22 @@
                     <input type="text" name="saleprice" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入销售价格">
                 </div>
             </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">司机</label>
+                <div class="layui-input-block">
+                    <input type="text" name="driver"  autocomplete="off" class="layui-input input-radius" placeholder="请输入司机名称">
+                </div>
+            </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">支付类型</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="paytype" value="微信" title="微信">
-                    <input type="radio" name="paytype" value="支付宝" title="支付宝" checked>
+                    <input type="radio" name="paytype" value="微信" title="微信" checked>
+                    <input type="radio" name="paytype" value="支付宝" title="支付宝">
+                    <input type="radio" name="paytype" value="现金" title="现金">
                     <input type="radio" name="paytype" value="银联" title="银联">
+                    <input type="radio" name="paytype" value="其他" title="其他">
                 </div>
             </div>
         </div>
@@ -285,6 +293,7 @@
                 {field: 'numberbak', title: '回桶数', align: 'center',width:'100'},
                 {field: 'size', title: '商品规格', align: 'center',width:'100'},
                 {field: 'saleprice', title: '销售价格', align: 'center',width:'120'},
+                {field: 'driver', title: '司机', align: 'center',width:'120'},
                 {field: 'remark', title: '备注', align: 'center',width:'120'},
                 {fixed: 'right', title: '操作', toolbar: '#salesRowBar', align: 'center',width:'260'}
             ] ],

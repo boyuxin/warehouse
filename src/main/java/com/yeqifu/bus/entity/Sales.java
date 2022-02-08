@@ -42,6 +42,8 @@ public class Sales implements Serializable {
 
     private Integer numberbak;
 
+    private String driver;
+
     private String remark;
 
     private Double saleprice;
