@@ -3,9 +3,9 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/warehouse?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC&useSSL=false
-      username: root
-      password: 123456
+      url: jdbc:mysql://120.55.159.254:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC&useSSL=false
+      username: wanbang
+      password: Wanbang2014
       max-active: 20
       max-wait: 5000
       initial-size: 1
@@ -57,8 +57,8 @@ shiro:
   authc-ulrs:
   - /**
 
-#修改端口号为8088
+#修改端口号为8080
 server:
-  port: 8888
+  port: 8080
 
 
