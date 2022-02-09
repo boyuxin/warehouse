@@ -10,6 +10,7 @@ import com.yeqifu.bus.entity.Sales;
 import com.yeqifu.bus.service.ICustomerService;
 import com.yeqifu.bus.service.IGoodsService;
 import com.yeqifu.bus.service.ISalesService;
+import com.yeqifu.bus.vo.GoodsVo;
 import com.yeqifu.bus.vo.SalesVo;
 import com.yeqifu.sys.common.DataGridView;
 import com.yeqifu.sys.common.ResultObj;
@@ -59,6 +60,7 @@ public class SalesController {
         //根据时间进行模糊查询
         queryWrapper.ge(salesVo.getStartTime()!=null,"salestime",salesVo.getStartTime());
         queryWrapper.le(salesVo.getEndTime()!=null,"salestime",salesVo.getEndTime());
+        queryWrapper.orderByDesc("id");
         IPage<Sales> page1 = salesService.page(page, queryWrapper);
         List<Sales> records = page1.getRecords();
         for (Sales sales : records) {
@@ -93,6 +95,14 @@ public class SalesController {
             salesVo.setOperateperson(user.getName());
             //设置销售时间
             salesVo.setSalestime(new Date());
+            GoodsVo goodsVo = new GoodsVo();
+            goodsVo.setId(salesVo.getGoodsid());
+            Goods goods = goodsService.getById(salesVo.getGoodsid());
+            Goods goodsUpdate = new Goods();
+            goodsUpdate.setId(salesVo.getGoodsid());
+            //goodsUpdate.setNumber(goods.getNumber() - salesVo.getNumber());
+            goodsUpdate.setTnumber(goods.getTnumber() + (salesVo.getNumberbak() - salesVo.getNumber()));
+            goodsService.updateById(goodsUpdate);
             salesService.save(salesVo);
             return ResultObj.ADD_SUCCESS;
         }catch (Exception e) {

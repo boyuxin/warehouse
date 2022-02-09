@@ -146,14 +146,16 @@
             <div class="layui-inline">
                 <label class="layui-form-label">商品名称</label>
                 <div class="layui-input-inline">
-                    <select name="goodsid" id="goodsid">
-                        <option value="0">请选择商品</option>
+                    <select name="goodsid" id="goodsid" lay-filter="goodsid">
+                        <option value="0" selected >请选择商品</option>
                     </select>
                 </div>
                 <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
             </div>
         </div>
         <div class="layui-form-item">
+            <div class="layui-input-block" id="myInputt">
+            </div>
             <div class="layui-inline">
                 <label class="layui-form-label">出库桶数</label>
                 <div class="layui-input-block">
@@ -435,6 +437,8 @@
             //重置商品的下拉列表
             var dom = $("#goodsid");
             dom.html("");
+            var domm = $("#myInputt");
+            domm.html("");
             $.get("/customer/loadAllCustomerForSelect",function (res) {
                 var data = res.data;
                 var dom = $("#customerid");
@@ -476,6 +480,19 @@
                 form.render("select");
             });
         }
+
+        //监听客户的下拉列表的事件
+        form.on('select(goodsid)',function (data) {
+            var goodsId = data.value;
+            $.get("/goods/loadGoodsByProviderIdNew",{goodsId:goodsId},function (res) {
+                var data = res.data;
+                var dom = $("#myInputt");
+                var nr = "已支付桶数 : " + data.number + "    库存空桶余量 : " + data.tnumber;
+                var html = '<input type="text" class="layui-input input-radius" disabled="disabled" value="'+nr+'">';
+                dom.html(html);
+            });
+
+        });
         
 
         form.on("submit(doSubmit)",function (data) {

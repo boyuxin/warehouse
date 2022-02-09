@@ -58,7 +58,6 @@ public class GoodsController {
         queryWrapper.like(StringUtils.isNotBlank(goodsVo.getPromitcode()),"promitcode",goodsVo.getPromitcode());
         queryWrapper.like(StringUtils.isNotBlank(goodsVo.getDescription()),"description",goodsVo.getDescription());
         queryWrapper.like(StringUtils.isNotBlank(goodsVo.getSize()),"size",goodsVo.getSize());
-
         queryWrapper.orderByDesc("id");
         goodsService.page(page,queryWrapper);
         List<Goods> records = page.getRecords();
@@ -193,6 +192,20 @@ public class GoodsController {
             }
         }
         return new DataGridView(list);
+    }
+    /**
+     * 根据供应商ID查询商品信息
+     * @param goodsId  商品ID
+     * @return
+     */
+    @RequestMapping("loadGoodsByProviderIdNew")
+    public DataGridView loadGoodsByProviderIdNew(Integer goodsId){
+        QueryWrapper<Goods> goodsQueryWrapper = new QueryWrapper<>();
+        goodsQueryWrapper.eq("id", goodsId);
+        Goods goods = goodsService.getOne(goodsQueryWrapper);
+        Provider provider = providerService.getById(goods.getProviderid());
+        goods.setProvidername(provider.getProvidername());
+        return new DataGridView(goods);
     }
 
     @RequestMapping("loadAllWarningGoods")

@@ -75,7 +75,7 @@ public class SalesbackController {
         queryWrapper.ge(salesbackVo.getStartTime()!=null,"salesbacktime",salesbackVo.getStartTime());
         queryWrapper.le(salesbackVo.getEndTime()!=null,"salesbacktime",salesbackVo.getEndTime());
         //通过商品退货时间对商品进行排序
-        queryWrapper.orderByDesc("salesbacktime");
+        queryWrapper.orderByDesc("id");
         salesbackService.page(page, queryWrapper);
         List<Salesback> records = page.getRecords();
         for (Salesback salesback : records) {
