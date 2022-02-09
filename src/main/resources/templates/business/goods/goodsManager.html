@@ -197,6 +197,12 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">空桶数量</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input input-radius" name="tnumber" lay-verify="required|number" placeholder="请输入空桶数量">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">预警值</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input input-radius" name="dangernum" lay-verify="required|number" placeholder="请输入商品预警值">
@@ -255,11 +261,8 @@
                 {field: 'description', title: '商品描述', align: 'center',width:'150'},
                 {field: 'price', title: '销售价格', align: 'center',width:'90'},
                 {field: 'number', title: '数量', align: 'center',width:'90'},
-                {field: 'tnumber', title: '库存空桶余量', align: 'center',width:'90'},
+                {field: 'tnumber', title: '库存空桶余量', align: 'center',width:'150'},
                 {field: 'dangernum', title: '库存预警值', align: 'center',width:'100'},
-                {field: 'goodsimg', title: '商品图片', align: 'center',width:'150', templet:function(d){
-                    return '<img width=40 height=40 src=/file/showImageByPath?path='+d.goodsimg+ ' />';
-                }},
                 {field: 'size', title: '规格', align: 'center',width:'120'},
                 {field: 'goodspackage', title: '包装', align: 'center',width:'120'},
                 {field: 'productcode', title: '生产批号', align: 'center',width:'130'},

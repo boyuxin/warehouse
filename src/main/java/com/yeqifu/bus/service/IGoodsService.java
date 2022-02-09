@@ -1,5 +1,6 @@
 package com.yeqifu.bus.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeqifu.bus.entity.Goods;
 
@@ -26,4 +27,6 @@ public interface IGoodsService extends IService<Goods> {
      * @return
      */
     List<Goods> loadAllWarning();
+
+    Goods query(QueryWrapper<Goods> objectQueryWrapper);
 }

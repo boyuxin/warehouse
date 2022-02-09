@@ -97,10 +97,11 @@ public class SalesController {
             salesVo.setSalestime(new Date());
             GoodsVo goodsVo = new GoodsVo();
             goodsVo.setId(salesVo.getGoodsid());
-            Goods goods = goodsService.getById(salesVo.getGoodsid());
+            QueryWrapper<Goods> objectQueryWrapper = new QueryWrapper<>();
+            objectQueryWrapper.eq("id", salesVo.getGoodsid());
+            Goods goods = goodsService.query(objectQueryWrapper);
             Goods goodsUpdate = new Goods();
             goodsUpdate.setId(salesVo.getGoodsid());
-            //goodsUpdate.setNumber(goods.getNumber() - salesVo.getNumber());
             goodsUpdate.setTnumber(goods.getTnumber() + (salesVo.getNumberbak() - salesVo.getNumber()));
             goodsService.updateById(goodsUpdate);
             salesService.save(salesVo);

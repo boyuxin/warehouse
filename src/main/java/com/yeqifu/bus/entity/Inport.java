@@ -38,6 +38,8 @@ public class Inport implements Serializable {
 
     private Integer number;
 
+    private Integer tnumber;
+
     private String remark;
 
     private Double inportprice;

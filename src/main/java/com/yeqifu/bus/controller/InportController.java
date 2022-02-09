@@ -10,6 +10,7 @@ import com.yeqifu.bus.entity.Provider;
 import com.yeqifu.bus.service.IGoodsService;
 import com.yeqifu.bus.service.IInportService;
 import com.yeqifu.bus.service.IProviderService;
+import com.yeqifu.bus.vo.GoodsVo;
 import com.yeqifu.bus.vo.InportVo;
 import com.yeqifu.sys.common.DataGridView;
 import com.yeqifu.sys.common.ResultObj;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.beans.Transient;
 import java.util.Date;
 import java.util.List;
 
@@ -69,7 +71,9 @@ public class InportController {
                 //设置供应商姓名
                 inport.setProvidername(provider.getProvidername());
             }
-            Goods goods = goodsService.getById(inport.getGoodsid());
+            QueryWrapper<Goods> objectQueryWrapper = new QueryWrapper<>();
+            objectQueryWrapper.eq("id", inport.getGoodsid());
+            Goods goods = goodsService.query(objectQueryWrapper);
             if (goods!=null){
                 //设置商品名称
                 inport.setGoodsname(goods.getGoodsname());
@@ -87,6 +91,7 @@ public class InportController {
      * @return
      */
     @RequestMapping("addInport")
+    @Transient
     public ResultObj addInport(InportVo inportVo){
         try {
             //获得当前系统用户
@@ -95,7 +100,17 @@ public class InportController {
             inportVo.setOperateperson(user.getName());
             //设置进货时间
             inportVo.setInporttime(new Date());
+
+            GoodsVo goodsVo = new GoodsVo();
+            goodsVo.setId(inportVo.getGoodsid());
+            QueryWrapper<Goods> objectQueryWrapper = new QueryWrapper<>();
+            objectQueryWrapper.eq("id", inportVo.getGoodsid());
+            Goods goods = goodsService.query(objectQueryWrapper);
+            Goods goodsUpdate = new Goods();
+            goodsUpdate.setId(inportVo.getGoodsid());
+            goodsUpdate.setTnumber(goods.getTnumber() + inportVo.getTnumber());
             inportService.save(inportVo);
+            goodsService.updateById(goodsUpdate);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

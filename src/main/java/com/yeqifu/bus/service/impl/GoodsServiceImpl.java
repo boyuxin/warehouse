@@ -1,5 +1,6 @@
 package com.yeqifu.bus.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yeqifu.bus.entity.Goods;
 import com.yeqifu.bus.mapper.GoodsMapper;
 import com.yeqifu.bus.service.IGoodsService;
@@ -64,5 +65,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     public List<Goods> loadAllWarning() {
         List<Goods> goods = baseMapper.loadAllWarning();
         return goods;
+    }
+
+    @Override
+    public Goods query(QueryWrapper<Goods> objectQueryWrapper) {
+        return baseMapper.selectOne(objectQueryWrapper);
     }
 }
