@@ -4,8 +4,10 @@ package com.yeqifu.bus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yeqifu.bus.entity.Customer;
 import com.yeqifu.bus.entity.Goods;
 import com.yeqifu.bus.entity.Provider;
+import com.yeqifu.bus.service.ICustomerService;
 import com.yeqifu.bus.service.IGoodsService;
 import com.yeqifu.bus.service.IProviderService;
 import com.yeqifu.bus.vo.GoodsVo;
@@ -37,6 +39,9 @@ public class GoodsController {
 
     @Autowired
     private IProviderService providerService;
+
+    @Autowired
+    private ICustomerService customerService;
 
     /**
      * 查询商品
@@ -74,8 +79,6 @@ public class GoodsController {
     @RequestMapping("addGoods")
     public ResultObj addGoods(GoodsVo goodsVo){
         try {
-            System.out.println("====================================");
-            System.out.println(goodsVo.getGoodsimg());
             if (goodsVo.getGoodsimg()!=null&&goodsVo.getGoodsimg().endsWith("_temp")){
                 String newName = AppFileUtils.renameFile(goodsVo.getGoodsimg());
                 goodsVo.setGoodsimg(newName);
@@ -142,6 +145,26 @@ public class GoodsController {
     public DataGridView loadAllGoodsForSelect(){
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<Goods>();
         queryWrapper.eq("available",Constast.AVAILABLE_TRUE);
+        List<Goods> list = goodsService.list(queryWrapper);
+        for (Goods goods : list) {
+            Provider provider = providerService.getById(goods.getProviderid());
+            if (null!=provider){
+                goods.setProvidername(provider.getProvidername());
+            }
+        }
+        return new DataGridView(list);
+    }
+
+    /**
+     * 加载所有可用的商品
+     * @return
+     */
+    @RequestMapping("loadAllGoodsForSelectNew")
+    public DataGridView loadAllGoodsForSelect(Integer customerid){
+        Customer byId = customerService.getById(customerid);
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<Goods>();
+        queryWrapper.eq("available",Constast.AVAILABLE_TRUE);
+        queryWrapper.eq("providerid",byId.getProviderid());
         List<Goods> list = goodsService.list(queryWrapper);
         for (Goods goods : list) {
             Provider provider = providerService.getById(goods.getProviderid());

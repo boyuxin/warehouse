@@ -94,6 +94,14 @@
             </div>
 
         </div>
+        <div class="layui-form-item magt3">
+            <label class="layui-form-label">供应商</label>
+            <div class="layui-input-block">
+                <select name="providerid" id="providerid">
+                    <option value="0">请选择供应商</option>
+                </select>
+            </div>
+        </div>
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">客户电话</label>
@@ -196,6 +204,7 @@
                 {type:'checkbox',fixed:'left'},
                 {field: 'id', title: 'ID', align: 'center',width:'50'},
                 {field: 'customername', title: '客户名称', align: 'center',width:'100'},
+                {field: 'providername', title: '供应商', align: 'center',width:'150'},
                 {field: 'address', title: '客户地址', align: 'center',width:'150'},
                 {field: 'telephone', title: '客户电话', align: 'center',width:'140'},
                 {field: 'zip', title: '邮编', align: 'center',width:'90'},
@@ -272,6 +281,16 @@
                 success:function () {
                     $("#dataFrm")[0].reset();
                     url="/customer/addCustomer";
+                    $.get("/provider/loadAllProviderForSelect",function(res){
+                        var data=res.data;
+                        var dom=$("#providerid");
+                        var html='<option value="0">请选择供应商</option>'
+                        $.each(data,function(index,item){
+                            html+='<option value="'+item.id+'">'+item.providername+'</option>'
+                        });
+                        dom.html(html);
+                        form.render("select");
+                    });
                 }
             });
         }

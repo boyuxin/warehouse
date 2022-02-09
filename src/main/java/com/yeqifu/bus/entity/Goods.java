@@ -49,6 +49,8 @@ public class Goods implements Serializable {
 
     private Integer number;
 
+    private Integer tnumber;
+
     private Integer dangernum;
 
     private String goodsimg;

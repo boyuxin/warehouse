@@ -459,11 +459,11 @@
         });
 
         //加载商品的下拉列表
-        function initGoodsSelect(goodsid) {
-            $.get("/goods/loadAllGoodsForSelect",function (res) {
+        function initGoodsSelect(customerid) {
+            $.get("/goods/loadAllGoodsForSelectNew",{customerid:customerid},function (res) {
                 var data = res.data;
                 var dom = $("#goodsid");
-                var html = '<option value="0">请选择商品</option>';
+                var html = '';
                 $.each(data,function (index, item) {
                     html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.size+']-'+'['+item.providername+']'+'</option>';
                 });

@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeqifu.bus.entity.Customer;
+import com.yeqifu.bus.entity.Provider;
 import com.yeqifu.bus.service.ICustomerService;
+import com.yeqifu.bus.service.IProviderService;
 import com.yeqifu.bus.vo.CustomerVo;
 import com.yeqifu.sys.common.Constast;
 import com.yeqifu.sys.common.DataGridView;
@@ -36,6 +38,10 @@ public class CustomerController {
     @Autowired
     private ICustomerService customerService;
 
+
+    @Autowired
+    private IProviderService providerService;
+
     /**
      * 查询所有的客户
      * @param customerVo
@@ -51,6 +57,13 @@ public class CustomerController {
         queryWrapper.like(StringUtils.isNotBlank(customerVo.getConnectionpersion()),"connectionpersion",customerVo.getConnectionpersion());
         queryWrapper.like(StringUtils.isNotBlank(customerVo.getPhone()),"phone",customerVo.getPhone());
         customerService.page(page,queryWrapper);
+        List<Customer> records = page.getRecords();
+        for (Customer customer : records) {
+            Provider provider = providerService.getById(customer.getProviderid());
+            if (null!=provider){
+                customer.setProvidername(provider.getProvidername());
+            }
+        }
         return new DataGridView(page.getTotal(),page.getRecords());
     }
 
