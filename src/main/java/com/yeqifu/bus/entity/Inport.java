@@ -48,6 +48,14 @@ public class Inport implements Serializable {
 
     private Integer goodsid;
 
+    private Integer customerid;
+
+    /**
+     * 客户名称
+     */
+    @TableField(exist = false)
+    private String customername;
+
     /**
      * 供应商姓名
      */

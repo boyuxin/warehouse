@@ -2,15 +2,19 @@ package com.yeqifu.bus.service.impl;
 
 import com.yeqifu.bus.entity.Goods;
 import com.yeqifu.bus.entity.Inport;
+import com.yeqifu.bus.entity.Sales;
 import com.yeqifu.bus.mapper.GoodsMapper;
 import com.yeqifu.bus.mapper.InportMapper;
 import com.yeqifu.bus.service.IInportService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yeqifu.bus.vo.InportVo;
+import com.yeqifu.bus.vo.SalesVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -26,6 +30,8 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
 
     @Autowired
     private GoodsMapper goodsMapper;
+    @Autowired
+    private InportMapper inportMapper;
 
     /**
      * 保存商品进货
@@ -77,4 +83,10 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
         //更新商品的数量
         return super.removeById(id);
     }
+
+    @Override
+    public List<Sales> loadStatistics(InportVo inportVo) {
+        return inportMapper.loadStatistics(inportVo);
+    }
+
 }

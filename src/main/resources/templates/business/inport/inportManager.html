@@ -138,10 +138,10 @@
     <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">供应商名称</label>
+                <label class="layui-form-label">客户名称</label>
                 <div class="layui-input-inline">
-                    <select name="providerid" id="providerid" lay-filter="providerid">
-                        <option value="0">请选择供应商</option>
+                    <select name="customerid" id="customerid" lay-filter="customerid">
+                        <option value="0">请选择客户</option>
                     </select>
                     <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
@@ -149,23 +149,25 @@
             <div class="layui-inline">
                 <label class="layui-form-label">商品名称</label>
                 <div class="layui-input-inline">
-                    <select name="goodsid" id="goodsid">
-                        <option value="0">请选择商品</option>
+                    <select name="goodsid" id="goodsid" lay-filter="goodsid">
+                        <option value="0" selected >请选择商品</option>
                     </select>
                 </div>
                 <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
             </div>
         </div>
         <div class="layui-form-item">
+            <div class="layui-input-block" id="myInputt">
+            </div>
             <div class="layui-inline">
-                <label class="layui-form-label">入库购买数量</label>
+                <label class="layui-form-label">购买数量</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="id">
                     <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入 入库购买数量">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">入库空桶数量</label>
+                <label class="layui-form-label">入库空桶数</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="id">
                     <input type="text" name="tnumber" lay-verify="required|number" autocomplete="off" class="layui-input input-radius" placeholder="请输入 入库空桶数量">
@@ -281,16 +283,16 @@
             page: true,
             height: "full-180",
             cols: [ [
-                {field: 'id', title: 'ID', align: 'center',width:'50'},
+                {field: 'customername', title: '客户名称', align: 'center',width:'150'},
                 {field: 'providername', title: '供应商', align: 'center',width:'150'},
                 {field: 'goodsname', title: '商品名称', align: 'center',width:'150'},
                 {field: 'paytype', title: '支付类型', align: 'center',width:'90'},
                 {field: 'inporttime', title: '进货时间', align: 'center',width:'170'},
                 {field: 'operateperson', title: '操作员', align: 'center',width:'130'},
-                {field: 'number', title: '购买数量', align: 'center',width:'100'},
-                {field: 'tnumber', title: '入库空桶数量', align: 'center',width:'130'},
+                {field: 'number', title: '购买桶数', align: 'center',width:'100'},
+                {field: 'tnumber', title: '回库空桶数', align: 'center',width:'130'},
                 {field: 'size', title: '商品规格', align: 'center',width:'100'},
-                {field: 'inportprice', title: '进货价格', align: 'center',width:'120'},
+                {field: 'inportprice', title: '入库收款', align: 'center',width:'120'},
                 {field: 'remark', title: '备注', align: 'center',width:'120'},
                 {fixed: 'right', title: '操作', toolbar: '#inportRowBar', align: 'center',width:'260'}
             ] ],
@@ -384,7 +386,7 @@
                 success:function () {
                     $("#dataFrm")[0].reset();
                     //初始化供应商的下拉列表
-                    initProviderSelect();
+                    initCustomerSelect();
                     //使该div隐藏
                     $(".mydiv").hide();
                     url="/inport/addInport";
@@ -416,6 +418,69 @@
             });
         }
 
+
+        //初始化添加和修改页面的下拉列表
+        function initCustomerSelect(customerid) {
+            //重置商品的下拉列表
+            var dom = $("#goodsid");
+            dom.html("");
+            var domm = $("#myInputt");
+            domm.html("");
+            $.get("/customer/loadAllCustomerForSelect",function (res) {
+                var data = res.data;
+                var dom = $("#customerid");
+                var html = '<option value="0">请选择客户</option>';
+                $.each(data,function (index, item) {
+                    html += '<option value="'+item.id+'">'+item.customername+'</option>';
+                });
+                dom.html(html);
+                //如果customerid有值就进行反选
+                if (customerid!=undefined){
+                    dom.val(customerid);
+                }
+                //重新渲染下拉列表
+                form.render("select");
+            });
+        };
+
+        //监听客户的下拉列表的事件
+        form.on('select(customerid)',function (data) {
+            var customerid = data.value;
+            initGoodsSelect(customerid);
+        });
+
+        //加载商品的下拉列表
+        function initGoodsSelect(customerid) {
+            $.get("/goods/loadAllGoodsForSelectNew",{customerid:customerid},function (res) {
+                var data = res.data;
+                var dom = $("#goodsid");
+                var html = '';
+                $.each(data,function (index, item) {
+                    html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.size+']-'+'['+item.providername+']'+'</option>';
+                });
+                dom.html(html);
+                //如果goodsid有值就进行反选
+                if (goodsid!=undefined){
+                    dom.val(goodsid);
+                }
+                //重新渲染下拉列表
+                form.render("select");
+            });
+        }
+
+        //监听客户的下拉列表的事件
+        form.on('select(goodsid)',function (data) {
+            var goodsId = data.value;
+            $.get("/goods/loadGoodsByProviderIdNew",{goodsId:goodsId},function (res) {
+                var data = res.data;
+                var dom = $("#myInputt");
+                var nr = "已支付桶数 : " + data.number + "    库存空桶余量 : " + data.tnumber;
+                var html = '<input type="text" class="layui-input input-radius" disabled="disabled" value="'+nr+'">';
+                dom.html(html);
+            });
+
+        });
+
         //初始化添加和修改页面的下拉列表
         function initProviderSelect(providerid) {
             //重置商品的下拉列表
@@ -444,24 +509,7 @@
            initGoodsSelect(providerid);
         });
 
-        //加载商品的下拉列表
-        function initGoodsSelect(providerid, goodsid) {
-            $.get("/goods/loadGoodsByProviderId",{providerid:providerid},function (res) {
-                var data = res.data;
-                var dom = $("#goodsid");
-                var html = '<option value="0">请选择商品</option>';
-                $.each(data,function (index, item) {
-                    html += '<option value="'+item.id+'">'+item.goodsname+'-['+item.size+']-'+'['+item.providername+']'+'</option>';
-                });
-                dom.html(html);
-                //如果goodsid有值就进行反选
-                if (goodsid!=undefined){
-                    dom.val(goodsid);
-                }
-                //重新渲染下拉列表
-                form.render("select");
-            });
-        }
+
         
 
         form.on("submit(doSubmit)",function (data) {
@@ -554,16 +602,16 @@
                 elem: "#statisticsTable",
                 where: myQueary.field,
                 title: "统计数据表格",
-                url: "/sales/loadStatistics",
+                url: "/inport/loadStatistics",
                 page: true,
                 height: "full-180",
                 cols: [ [
                     {field: 'customername', title: '客户名称', align: 'center',width:'180'},
                     {field: 'goodsname', title: '商品名称', align: 'center',width:'180'},
-                    {field: 'total', title: '销售次数', align: 'center',width:'120'},
-                    {field: 'number', title: '出库总桶数', align: 'center',width:'100'},
+                    {field: 'total', title: '购买次数', align: 'center',width:'120'},
+                    {field: 'number', title: '购买总桶数', align: 'center',width:'100'},
                     {field: 'numberbak', title: '回库总桶数', align: 'center',width:'130'},
-                    {field: 'saleprice', title: '销售总价格', align: 'center',width:'130'},
+                    {field: 'saleprice', title: '收费总额', align: 'center',width:'130'},
                 ] ]
             });
         }

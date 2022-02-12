@@ -202,7 +202,10 @@ public class GoodsController {
     public DataGridView loadGoodsByProviderIdNew(Integer goodsId){
         QueryWrapper<Goods> goodsQueryWrapper = new QueryWrapper<>();
         goodsQueryWrapper.eq("id", goodsId);
-        Goods goods = goodsService.getOne(goodsQueryWrapper);
+        Goods goods = goodsService.query(goodsQueryWrapper);
+        QueryWrapper<Provider> queryWrapper = new QueryWrapper<>();
+        goodsQueryWrapper.eq("id", goodsId);
+
         Provider provider = providerService.getById(goods.getProviderid());
         goods.setProvidername(provider.getProvidername());
         return new DataGridView(goods);

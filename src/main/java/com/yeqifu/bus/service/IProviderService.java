@@ -18,4 +18,5 @@ public interface IProviderService extends IService<Provider> {
      * @param id
      */
     void deleteProviderById(Integer id);
+
 }

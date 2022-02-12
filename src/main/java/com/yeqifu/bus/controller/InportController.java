@@ -4,14 +4,16 @@ package com.yeqifu.bus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeqifu.bus.entity.Goods;
-import com.yeqifu.bus.entity.Inport;
-import com.yeqifu.bus.entity.Provider;
+import com.yeqifu.bus.entity.*;
+import com.yeqifu.bus.mapper.GoodsMapper;
+import com.yeqifu.bus.mapper.ProviderMapper;
+import com.yeqifu.bus.service.ICustomerService;
 import com.yeqifu.bus.service.IGoodsService;
 import com.yeqifu.bus.service.IInportService;
 import com.yeqifu.bus.service.IProviderService;
 import com.yeqifu.bus.vo.GoodsVo;
 import com.yeqifu.bus.vo.InportVo;
+import com.yeqifu.bus.vo.SalesVo;
 import com.yeqifu.sys.common.DataGridView;
 import com.yeqifu.sys.common.ResultObj;
 import com.yeqifu.sys.common.WebUtils;
@@ -45,6 +47,12 @@ public class InportController {
     @Autowired
     private IGoodsService goodsService;
 
+    @Autowired
+    private ProviderMapper providerMapper;
+
+    @Autowired
+    private ICustomerService customerService;
+
     /**
      * 查询商品进货
      * @param inportVo
@@ -66,7 +74,8 @@ public class InportController {
         IPage<Inport> page1 = inportService.page(page, queryWrapper);
         List<Inport> records = page1.getRecords();
         for (Inport inport : records) {
-            Provider provider = providerService.getById(inport.getProviderid());
+            QueryWrapper<Provider> objectQueryWrapper1 = new QueryWrapper<>();
+            Provider provider = providerMapper.selectOne(objectQueryWrapper1);
             if (provider!=null){
                 //设置供应商姓名
                 inport.setProvidername(provider.getProvidername());
@@ -79,6 +88,10 @@ public class InportController {
                 inport.setGoodsname(goods.getGoodsname());
                 //设置商品规格
                 inport.setSize(goods.getSize());
+            }
+            Customer customer = customerService.getById(inport.getCustomerid());
+            if(null!=customer){
+                inport.setCustomername(customer.getCustomername());
             }
         }
         return new DataGridView(page1.getTotal(),page1.getRecords());
@@ -151,6 +164,35 @@ public class InportController {
         }
     }
 
+    /**
+     * 查询所有商品统计
+     * @return
+     */
+    @RequestMapping("loadStatistics")
+    public DataGridView loadStatistics(InportVo inportVo){
+        List<Sales> sales = inportService.loadStatistics(inportVo);
+        setname(sales);
+        return new DataGridView(sales);
+    }
 
+    private void setname(List<Sales> records) {
+        for (Sales sales : records) {
+            //设置客户姓名
+            Customer customer = customerService.getById(sales.getCustomerid());
+            if (null != customer) {
+                sales.setCustomername(customer.getCustomername());
+            }
+            //设置商品名称
+            QueryWrapper<Goods> goodsQueryWrapper = new QueryWrapper<>();
+            goodsQueryWrapper.eq("id", sales.getGoodsid());
+            Goods goods = goodsService.query(goodsQueryWrapper);
+            if (null != goods) {
+                //设置商品名称
+                sales.setGoodsname(goods.getGoodsname());
+                //设置商品规格
+                sales.setSize(goods.getSize());
+            }
+        }
+    }
 }
 

@@ -2,6 +2,11 @@ package com.yeqifu.bus.service;
 
 import com.yeqifu.bus.entity.Inport;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yeqifu.bus.entity.Sales;
+import com.yeqifu.bus.vo.InportVo;
+import com.yeqifu.bus.vo.SalesVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,4 +19,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IInportService extends IService<Inport> {
 
 
+    List<Sales> loadStatistics(InportVo inportVo);
 }
