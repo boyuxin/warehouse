@@ -109,6 +109,8 @@ public class GoodsController {
                     AppFileUtils.removeFileByPath(oldPath);
                 }
             }
+            goodsVo.setNumber(null);
+            goodsVo.setTnumber(null);
             goodsService.updateById(goodsVo);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
