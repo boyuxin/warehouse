@@ -1,6 +1,8 @@
 package com.yeqifu.bus.controller;
 
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -79,6 +82,18 @@ public class SalesController {
             }
         }
         return new DataGridView(page1.getTotal(),page1.getRecords());
+    }
+
+    /**
+     * 查询所有商品统计
+     * @param salesVo
+     * @return
+     */
+    @RequestMapping("loadStatistics")
+    public DataGridView loadStatistics(SalesVo salesVo){
+        System.out.println(JSONUtil.toJsonStr(salesVo));
+
+        return new DataGridView();
     }
 
     /**
