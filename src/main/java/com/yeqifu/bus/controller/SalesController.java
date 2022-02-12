@@ -73,7 +73,9 @@ public class SalesController {
                 sales.setCustomername(customer.getCustomername());
             }
             //设置商品名称
-            Goods goods = goodsService.getById(sales.getGoodsid());
+            QueryWrapper<Goods> goodsQueryWrapper = new QueryWrapper<>();
+            goodsQueryWrapper.eq("id", sales.getGoodsid());
+            Goods goods = goodsService.query(goodsQueryWrapper);
             if (null!=goods){
                 //设置商品名称
                 sales.setGoodsname(goods.getGoodsname());
