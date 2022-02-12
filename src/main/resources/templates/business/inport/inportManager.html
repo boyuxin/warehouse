@@ -102,6 +102,9 @@
             <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch"><i
                     class="layui-icon layui-icon-search layui-icon-normal"></i>查询
             </button>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doStatistics"><i
+                    class="layui-icon layui-icon-search layui-icon-normal"></i>统计
+            </button>
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"><i
                     class="layui-icon layui-icon-refresh"></i><span>重置</span>
             </button>
@@ -205,7 +208,10 @@
         </div>
     </form>
 </div>
-
+<!--统计弹出层-->
+<div id="statisticsDiv" style="display: none;padding: 10px;padding-right: 5%">
+    <table class="layui-hide" id="statisticsTable" lay-filter="statisticsTable"></table>
+</div>
 <!--退货的弹出层-->
 <div id="backGoodsDiv" style="display: none;padding-right: 3%">
     <form action="" method="post" class="layui-form" id="dataFrmBack" lay-filter="dataFrmBack">
@@ -526,6 +532,41 @@
             return false;
         })
 
+        var myQueary;
+        //监控模糊统计按钮事件
+        form.on("submit(doStatistics)", function (data) {
+            myQueary = data;
+            layer.open({
+                type:1,
+                content:$("#statisticsDiv"),
+                area:['900px','600px'],
+                title:'统计数据表格',
+                success:function (data) {
+                    sestatisticsTable(data);
+                }
+            });
+
+            return true;
+        });
+
+        function sestatisticsTable(data){
+            table.render({
+                elem: "#statisticsTable",
+                where: myQueary.field,
+                title: "统计数据表格",
+                url: "/sales/loadStatistics",
+                page: true,
+                height: "full-180",
+                cols: [ [
+                    {field: 'customername', title: '客户名称', align: 'center',width:'180'},
+                    {field: 'goodsname', title: '商品名称', align: 'center',width:'180'},
+                    {field: 'total', title: '销售次数', align: 'center',width:'120'},
+                    {field: 'number', title: '出库总桶数', align: 'center',width:'100'},
+                    {field: 'numberbak', title: '回库总桶数', align: 'center',width:'130'},
+                    {field: 'saleprice', title: '销售总价格', align: 'center',width:'130'},
+                ] ]
+            });
+        }
 
 
     });

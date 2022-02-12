@@ -6,10 +6,12 @@ import com.yeqifu.bus.entity.Sales;
 import com.yeqifu.bus.mapper.GoodsMapper;
 import com.yeqifu.bus.mapper.SalesMapper;
 import com.yeqifu.bus.service.ISalesService;
+import com.yeqifu.bus.vo.SalesVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -25,6 +27,8 @@ public class SalesServiceImpl extends ServiceImpl<SalesMapper, Sales> implements
     @Autowired
     private GoodsMapper goodsMapper;
 
+    @Autowired
+    private SalesMapper salesMapper;
     /**
      * 添加商品销售
      * @param entity    商品销售实体类
@@ -71,5 +75,11 @@ public class SalesServiceImpl extends ServiceImpl<SalesMapper, Sales> implements
         goods.setNumber(goods.getNumber()+sales.getNumber());
         goodsMapper.updateById(goods);
         return super.removeById(id);
+    }
+
+    @Override
+    public List<Sales> loadStatistics(SalesVo salesVo) {
+        List<Sales> sales = salesMapper.loadStatistics(salesVo);
+        return sales;
     }
 }

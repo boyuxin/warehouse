@@ -66,6 +66,11 @@ public class SalesController {
         queryWrapper.orderByDesc("id");
         IPage<Sales> page1 = salesService.page(page, queryWrapper);
         List<Sales> records = page1.getRecords();
+        setname(records);
+        return new DataGridView(page1.getTotal(),page1.getRecords());
+    }
+
+    private void setname(List<Sales> records) {
         for (Sales sales : records) {
             //设置客户姓名
             Customer customer = customerService.getById(sales.getCustomerid());
@@ -83,7 +88,6 @@ public class SalesController {
                 sales.setSize(goods.getSize());
             }
         }
-        return new DataGridView(page1.getTotal(),page1.getRecords());
     }
 
     /**
@@ -93,9 +97,9 @@ public class SalesController {
      */
     @RequestMapping("loadStatistics")
     public DataGridView loadStatistics(SalesVo salesVo){
-        System.out.println(JSONUtil.toJsonStr(salesVo));
-
-        return new DataGridView();
+        List<Sales> sales = salesService.loadStatistics(salesVo);
+        setname(sales);
+        return new DataGridView(sales);
     }
 
     /**

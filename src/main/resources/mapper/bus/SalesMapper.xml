@@ -2,4 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yeqifu.bus.mapper.SalesMapper">
 
+
+    <resultMap id="BaseResultMap" type="com.yeqifu.bus.entity.Sales">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="customerid" property="customerid" jdbcType="TINYINT"/>
+        <result column="paytype" property="paytype" jdbcType="TIMESTAMP"/>
+        <result column="salestime" property="salestime" jdbcType="TIMESTAMP"/>
+        <result column="operateperson" property="operateperson" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="TINYINT"/>
+        <result column="numberbak" property="numberbak" jdbcType="TINYINT"/>
+        <result column="driver" property="driver" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="saleprice" property="saleprice" jdbcType="NUMERIC"/>
+        <result column="goodsid" property="goodsid" jdbcType="TINYINT"/>
+        <result column="total" property="total" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="loadStatistics" resultMap="BaseResultMap">
+        select
+            s.customerid as customerid,
+            s.goodsid as goodsid,
+            COUNT( * ) as total,
+            sum( s.number ) as number,
+            sum( s.numberbak ) as numberbak,
+            sum( s.saleprice )  as saleprice
+        from bus_sales s
+        GROUP BY
+        s.customerid,
+        s.goodsid
+        <if test="customerid != null and customerid != ''   and goodsid != null and goodsid != '' ">
+            HAVING s.customerid = #{customerid,jdbcType=TINYINT} and s.goodsid = #{goodsid,jdbcType=TINYINT}
+        </if>
+        <if test="customerid != null and customerid != '' and goodsid = null ">
+            HAVING s.customerid = #{customerid,jdbcType=TINYINT}
+        </if>
+        <if test="goodsid != null and goodsid != '' and customerid = null ">
+            HAVING s.goodsid = #{goodsid,jdbcType=TINYINT}
+        </if>
+    </select>
+
 </mapper>

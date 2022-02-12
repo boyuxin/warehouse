@@ -68,4 +68,10 @@ public class Sales implements Serializable {
     @TableField(exist = false)
     private String size;
 
+    /**
+     * 商品总数
+     */
+    @TableField(exist = false)
+    private String total;
+
 }

@@ -2,6 +2,9 @@ package com.yeqifu.bus.mapper;
 
 import com.yeqifu.bus.entity.Sales;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yeqifu.bus.vo.SalesVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SalesMapper extends BaseMapper<Sales> {
 
+    List<Sales> loadStatistics(SalesVo salesVo);
 }
