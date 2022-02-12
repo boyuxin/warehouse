@@ -79,6 +79,7 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
         Goods goods = goodsMapper.selectById(inport.getGoodsid());
         //库存算法  当前库存-进货单数量
         goods.setNumber(goods.getNumber()-inport.getNumber());
+        goods.setTnumber(goods.getTnumber() - inport.getTnumber());
         goodsMapper.updateById(goods);
         //更新商品的数量
         return super.removeById(id);

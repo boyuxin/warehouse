@@ -73,6 +73,7 @@ public class SalesServiceImpl extends ServiceImpl<SalesMapper, Sales> implements
         Goods goods = goodsMapper.selectById(sales.getGoodsid());
         //仓库商品数量=原库存+删除商品销售单的数量
         goods.setNumber(goods.getNumber()+sales.getNumber());
+        goods.setTnumber(goods.getTnumber()+(   sales.getNumber() - sales.getNumberbak() ));
         goodsMapper.updateById(goods);
         return super.removeById(id);
     }

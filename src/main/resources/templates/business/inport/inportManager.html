@@ -407,11 +407,7 @@
                     $("#dataFrm")[0].reset();
                     //装载新的数据
                     form.val("dataFrm",data);
-                    //供应商进行反选
-                    initProviderSelect(data.providerid);
-                    //商品进行反选
-                    initGoodsSelect(data.providerid,data.goodsid);
-                    //禁用供应商和商品的下拉列表
+                    initCustomerSelect();
                     $(".mydiv").show();
                     url="/inport/updateInport";
                 }
